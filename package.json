@@ -1,6 +1,6 @@
 {
   "name": "@ganxing/utils",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A comprehensive collection of personal programming utilities by Gan-Xing.",
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",
