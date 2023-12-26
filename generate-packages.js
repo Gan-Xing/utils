@@ -1,16 +1,24 @@
-const fs = require("fs");
+const fs = require("fs").promises;
 
-// 读取当前的 package.json
-const packageJson = require("./package.json");
+async function generatePackageFiles() {
+  try {
+    // 读取当前的 package.json
+    const packageJson = require("./package.json");
 
-const packageDev = { ...packageJson };
+    // 创建 package.json 的深拷贝
+    const packageDev = JSON.parse(JSON.stringify(packageJson));
 
-const packageTurbodev = { ...packageJson };
-delete packageTurbodev.devDependencies;
+    // 再次创建 package.json 的深拷贝，并修改 @ganxing/utils 的版本
+    const packageTurbodev = JSON.parse(JSON.stringify(packageJson));
+    delete packageTurbodev.devDependencies;
 
-// 写入到文件
-fs.writeFileSync(
-  "packageturbodev.json",
-  JSON.stringify(packageTurbodev, null, 2),
-);
-fs.writeFileSync("packagedev.json", JSON.stringify(packageDev, null, 2));
+    // 异步写入到文件
+    await fs.writeFile("packageturbodev.json", JSON.stringify(packageTurbodev, null, 2));
+    await fs.writeFile("packagedev.json", JSON.stringify(packageDev, null, 2));
+  } catch (error) {
+    console.error("Error occurred:", error);
+    process.exit(1); // 发生错误时退出脚本
+  }
+}
+
+generatePackageFiles();
